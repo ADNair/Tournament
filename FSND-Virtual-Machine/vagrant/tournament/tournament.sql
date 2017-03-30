@@ -14,15 +14,14 @@ CREATE DATABASE tournament;
 \c tournament
 
 CREATE TABLE Players(
-	player_id serial PRIMARY KEY,
+	player_id SERIAL PRIMARY KEY,
 	player_name TEXT
 );
 
 CREATE TABLE Matches(
-	player_id serial REFERENCES Players(player_id) ON DELETE CASCADE,
-	player_name TEXT,
-	winner INTEGER REFERENCES Players(player_id) ON DELETE CASCADE,
-	loser INTEGER REFERENCES Players(player_id) ON DELETE CASCADE
-	CHECK (winner <> loser)
+	match_id SERIAL PRIMARY KEY,
+	winner_id INTEGER REFERENCES Players(player_id) ON DELETE CASCADE,
+	loser_id INTEGER REFERENCES Players(player_id) ON DELETE CASCADE
+	CHECK (winner_id <> loser_id)
 );
 	

@@ -58,7 +58,7 @@ def registerPlayer(name):
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("insert into Players (NAME) values (%s)",(name,))
+    c.execute("insert into Players (player_name) values (%s)",(name,))
     conn.commit() 
     conn.close()
 
@@ -81,9 +81,9 @@ def playerStandings():
     c = conn.cursor()
     query = """
     create view standings as
-    select Players.ID,Players.NAME,
-        (Select count(Matches.ID_WIN) From Matches where Players.ID = Matches.ID_WIN) AS winn,
-        (SELECT count(Matches.MATCHID) FROM Matches where Players.ID = Matches.ID_WIN OR Players.ID = Matches.ID_LOSE) AS games
+    select Players.player_id,Players.player_name,
+        (SELECT count(Matches.winner_id) FROM Matches where player_id = Matches.winner_id) AS winn,
+        (SELECT count(Matches.match_id) FROM Matches where player_id = Matches.winner_id OR Players.player_id = Matches.loser_id) AS games
     from Players
     order by winn desc, games desc;
 
@@ -99,12 +99,12 @@ def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
     Args:
-      winner:  the id number of the player who won
-      loser:  the id number of the player who lost
+      winner_id:  the id number of the player who won
+      loser_id:  the id number of the player who lost
     """
     conn = connect()
     c = conn.cursor()
-    c.execute("insert into Matches (ID_WIN,ID_LOSE) values (%s,%s)",(winner,loser))
+    c.execute("insert into Matches (winner_id,loser_id) values (%s,%s)",(winner,loser))
     conn.commit() 
     conn.close()
  
