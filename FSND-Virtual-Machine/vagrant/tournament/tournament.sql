@@ -5,15 +5,24 @@
 --
 -- You can write comments in this file by starting them with two dashes, like
 -- these lines here.
+DROP TABLE IF EXISTS Matches CASCADE;
+DROP TABLE IF EXISTS Players CASCADE;
+DROP DATABASE IF EXISTS tournament;
+
+CREATE DATABASE tournament;
+
+\c tournament
 
 CREATE TABLE Players(
-	id serial primary key,
-	name text,
+	player_id serial PRIMARY KEY,
+	player_name TEXT
 );
 
 CREATE TABLE Matches(
-	id serial PRIMARY KEY,
-	winner INTEGER,
-	loser INTEGER
+	player_id serial REFERENCES Players(player_id) ON DELETE CASCADE,
+	player_name TEXT,
+	winner INTEGER REFERENCES Players(player_id) ON DELETE CASCADE,
+	loser INTEGER REFERENCES Players(player_id) ON DELETE CASCADE
+	CHECK (winner <> loser)
 );
 	
